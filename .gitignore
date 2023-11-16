@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+*.egg-info/
+*.egg
+build/
+dist/
+.env
+
+# Django stuff
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+
+# Virtual environment
+venv/
+*.virtualenv/
+
+# IDEs and text editors
+*.swp
+*.swo
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Other
+*.csv
+.mypy_cache/
+.cache
+celerybeat-schedule

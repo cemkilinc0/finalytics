@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: django_app
+    command: /usr/src/app/docker_run.sh
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=finalytics_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    volumes:
+      - redis_data:/data
+
+  celery_worker:
+    build: .
+    container_name: celery_worker
+    command: celery -A router worker -l info
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
+      - web
+
+  celery_beat:
+    build: .
+    container_name: celery_beat
+    command: celery -A router beat -l info --scheduler redbeat.schedulers:RedBeatScheduler
+    volumes:
+      - .:/usr/src/app
+    depends_on:
+      - redis
+      - web
+
+  flower:
+    build: .
+    container_name: flower
+    command: celery -A router flower --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+      - web
+
+volumes:
+  pg_data:
+    driver: local
+  redis_data:
+    driver: local
